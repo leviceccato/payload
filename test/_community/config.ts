@@ -5,6 +5,7 @@ import path from 'path'
 import { buildConfigWithDefaults } from '../buildConfigWithDefaults.js'
 import { devUser } from '../credentials.js'
 import { MediaCollection } from './collections/Media/index.js'
+import { PagesCollection, pagesSlug } from './collections/Pages/index.js'
 import { PostsCollection, postsSlug } from './collections/Posts/index.js'
 import { MenuGlobal } from './globals/Menu/index.js'
 
@@ -13,7 +14,7 @@ const dirname = path.dirname(filename)
 
 export default buildConfigWithDefaults({
   // ...extend config here
-  collections: [PostsCollection, MediaCollection],
+  collections: [PostsCollection, PagesCollection, MediaCollection],
   admin: {
     importMap: {
       baseDir: path.resolve(dirname),
@@ -33,12 +34,27 @@ export default buildConfigWithDefaults({
       },
     })
 
-    await payload.create({
-      collection: postsSlug,
-      data: {
-        title: 'example post',
-      },
-    })
+    await Promise.all(
+      Array.from({ length: 15 }, (_, index) =>
+        payload.create({
+          collection: postsSlug,
+          data: {
+            title: `Post ${index}`,
+          },
+        }),
+      ),
+    )
+
+    await Promise.all(
+      Array.from({ length: 15 }, (_, index) =>
+        payload.create({
+          collection: pagesSlug,
+          data: {
+            title: `Page ${index}`,
+          },
+        }),
+      ),
+    )
   },
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),

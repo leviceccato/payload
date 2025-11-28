@@ -9,5 +9,11 @@ export const MenuGlobal: GlobalConfig = {
       name: 'globalText',
       type: 'text',
     },
+    {
+      name: 'relationshipTest',
+      hasMany: true,
+      type: 'relationship',
+      relationTo: ['posts', 'pages'],
+    },
   ],
 }
